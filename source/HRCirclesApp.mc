@@ -1,6 +1,6 @@
 using Toybox.Application as App;
 
-class HRZonesApp extends App.AppBase {
+class HRCirclesApp extends App.AppBase {
 
     //! onStart() is called on application start up
     function onStart() {
@@ -12,7 +12,9 @@ class HRZonesApp extends App.AppBase {
 
     //! Return the initial view of your application here
     function getInitialView() {
-        return [ new HRZonesView() ];
+        return [ new HRCirclesView() ];
+        
+        
     }
 
 }

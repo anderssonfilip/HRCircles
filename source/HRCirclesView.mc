@@ -3,7 +3,7 @@ using Toybox.Graphics as Gfx;
 using Toybox.UserProfile as User;
 using Toybox.Math as Math;
 
-class HRZonesView extends Ui.DataField {
+class HRCirclesView extends Ui.DataField {
 
 	const age = Time.Gregorian.info(Time.now(), Time.FORMAT_SHORT).year - User.getProfile().birthYear.toNumber();
 	
@@ -33,6 +33,11 @@ class HRZonesView extends Ui.DataField {
     //! The given info object contains all the current workout information.
     //! Calculate a value and return it in this method.
     function compute(info) {
+    
+    	if(info.currentHeartRate == null) // no activity
+    	{
+    		return; 
+    	}
 
 		hr = info.currentHeartRate - restingHR;
 		
@@ -62,6 +67,23 @@ class HRZonesView extends Ui.DataField {
     
     function onUpdate(dc){
     
+    	if(hr <= 0)
+    	{
+    		return;
+    	}
+    	
+    	// normalize zones with total time
+		var sum = 0.0;
+		for(var i = 0; i < timeInZone.size(); i++)
+       	{
+ 			sum += timeInZone[i];
+		}
+		
+		if(sum <= 0.0)
+		{
+			return;
+		}
+    		
     	dc.clear();
 		dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_RED);
 		dc.fillRectangle(0, 0, dc.getWidth(), dc.getHeight());
@@ -69,13 +91,6 @@ class HRZonesView extends Ui.DataField {
 		
 		dc.drawText(dc.getWidth()/2, dc.getHeight()/2 - 48, Gfx.FONT_NUMBER_HOT, (hr + restingHR).toString(), Gfx.TEXT_JUSTIFY_CENTER);
   
-		// normalize zones with total time
-		var sum = 0;
-		for(var i = 0; i < timeInZone.size(); i++)
-       	{
- 			sum += timeInZone[i];
-		}
-		
 		// width & height assumed equal to draw arc of a circle
 		var c = dc.getWidth()/2; 
 		//var cy = dc.getHeight()/2;
