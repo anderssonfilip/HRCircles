@@ -20,6 +20,8 @@ class HRCirclesView extends Ui.DataField {
     const BAR_THICKNESS = 7;
     const ARC_MAX_ITERS = 300;
     
+    var numberColor = Gfx.COLOR_WHITE;
+    
     const fullCircle = Math.PI * 2;
 	
     function initialize() {
@@ -44,22 +46,27 @@ class HRCirclesView extends Ui.DataField {
 		if(hr > zones[0] && hr <= zones[1])
 		{
 			timeInZone[0] += 1;
+			numberColor = Gfx.COLOR_DK_GREEN;
 		}
 		else if(hr > zones[1] && hr <= zones[2])
 		{
 			timeInZone[1] += 1;
+			numberColor = Gfx.COLOR_GREEN;
 		}
 		else if(hr > zones[2] && hr <= zones[3])
 		{
 			timeInZone[2] += 1;
+			numberColor = Gfx.COLOR_YELLOW;
 		}
 		else if(hr > zones[3] && hr <= zones[4])
 		{
 			timeInZone[3] += 1;
+			numberColor = Gfx.COLOR_ORANGE;
 		}
 		else if(hr > zones[4])
 		{
 			timeInZone[4] += 1;
+			numberColor = Gfx.COLOR_RED;
 		}
 		
         return info.currentHeartRate;
@@ -67,7 +74,7 @@ class HRCirclesView extends Ui.DataField {
     
     function onUpdate(dc){
     
-    	if(hr <= 0)
+    	if(hr <= 0.0)
     	{
     		return;
     	}
@@ -87,7 +94,7 @@ class HRCirclesView extends Ui.DataField {
     	dc.clear();
 		dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_RED);
 		dc.fillRectangle(0, 0, dc.getWidth(), dc.getHeight());
-		dc.setColor(Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);
+		dc.setColor(numberColor, Gfx.COLOR_TRANSPARENT);
 		
 		dc.drawText(dc.getWidth()/2, dc.getHeight()/2 - 48, Gfx.FONT_NUMBER_HOT, (hr + restingHR).toString(), Gfx.TEXT_JUSTIFY_CENTER);
   
